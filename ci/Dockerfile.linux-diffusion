@@ -1,0 +1,6 @@
+# Linux release builds: compiled on Debian 11 (glibc 2.31), so they also
+# run on systems older than the development machine (Debian 11 and later,
+# Ubuntu 20.04 and later).
+FROM rust:1-slim-bullseye
+RUN apt-get update && apt-get install -y --no-install-recommends g++ \
+    && rm -rf /var/lib/apt/lists/*

@@ -1,0 +1,59 @@
+[package]
+name = "cnz"
+version = "1.0.0"
+edition = "2021"
+description = "CNZ : compression et extraction d'archives .cnz (CN Technology)"
+license = "MIT OR Apache-2.0"
+
+[dependencies]
+anyhow = "1"
+argon2 = "0.5"
+blake3 = "1"
+# Reading and creating other formats (src/autres.rs, src/creer.rs):
+# pure-Rust libraries.
+bzip2 = "0.6"
+flate2 = "1"
+lzma-rust2 = { version = "0.24", default-features = false, features = ["std", "xz", "lzip", "encoder"] }
+sevenz-rust2 = { version = "0.24", default-features = false, features = ["aes256", "bzip2", "ppmd", "deflate", "zstd", "brotli", "lz4", "compress"] }
+tar = { version = "0.4", default-features = false }
+# RAR: extraction only, through rars (free Rust reader, Apache-2.0, written
+# from a specification of the format, without UnRAR code). "rar" feature.
+rars = { version = "0.12", optional = true, default-features = false, features = ["encryption"] }
+zip = { version = "9", default-features = false, features = ["aes-crypto", "bzip2", "deflate64", "deflate-flate2", "lzma", "ppmd", "xz", "zstd", "legacy-zip"] }
+chacha20poly1305 = "0.10"
+chrono = { version = "0.4", default-features = false, features = ["clock"] }
+clap = { version = "4", features = ["derive"] }
+ctrlc = "3"
+crc32c = "0.6"
+fastcdc = "3"
+filetime = "0.2"
+indicatif = "0.17"
+# Classic zlib compiled into CNz, pinned version: rebuilding Deflate streams
+# (stage 4) depends on its exact algorithm (see src/rebuild.rs).
+libz-sys = { version = "=1.1.30", default-features = false, features = ["static", "stock-zlib", "libc"] }
+rayon = "1"
+reed-solomon-simd = "3"
+rpassword = "7"
+sysinfo = { version = "0.33", default-features = false, features = ["system"] }
+unicode-normalization = "0.1"
+zeroize = "1"
+zstd = "0.13"
+
+[target.'cfg(unix)'.dependencies]
+libc = "0.2"
+xattr = "1"
+
+[target.'cfg(windows)'.dependencies]
+windows-sys = { version = "0.59", features = ["Win32_Storage_FileSystem"] }
+
+[profile.release]
+lto = true
+codegen-units = 1
+
+[features]
+default = ["rar"]
+# Reading RAR archives through rars (Rust, Apache-2.0).
+rar = ["dep:rars"]
+# Multi-core zstd compression inside one block (for measurements only).
+mt = ["zstd/zstdmt"]
+

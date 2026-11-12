@@ -1,0 +1,27 @@
+# Builds CNz and runs every test on Linux, Windows and macOS (Intel and
+# Apple Silicon) on each change. Free for an open-source project.
+name: tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  tests:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, ubuntu-24.04-arm, windows-latest, macos-latest, macos-13]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - run: cargo test --release
+      - run: cargo build --release
+
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t cnz-android -f ci/Dockerfile.android ci
+      - run: docker run --rm -v "$PWD":/src -w /src cnz-android cargo build --release --target aarch64-linux-android

@@ -1,0 +1,6 @@
+# Robustness tests with libFuzzer: Rust nightly and cargo-fuzz.
+FROM rust:1-slim-trixie
+RUN apt-get update && apt-get install -y --no-install-recommends g++ \
+    && rm -rf /var/lib/apt/lists/* \
+    && rustup toolchain install nightly --profile minimal \
+    && cargo +nightly install --locked cargo-fuzz

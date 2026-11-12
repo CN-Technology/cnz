@@ -1,0 +1,18 @@
+CNz pour Linux — CN Technology (https://cntechnology.fr/cnz)
+
+Installer (sans droits d'administrateur) :
+    sh installer.sh
+
+CNz s'ajoute au menu des applications et au clic droit de l'explorateur de
+fichiers (Nautilus, Dolphin, Nemo) : « Compresser avec CNz », « Compresser
+en ZIP », « Extraire ici ».
+
+Ou sans installer :
+    ./cnz-fenetre              la fenêtre
+    ./cnz --help               la ligne de commande
+
+Désinstaller :
+    sh desinstaller.sh
+
+Fonctionne sur Debian 11, Ubuntu 20.04 et plus récents (processeurs 64 bits
+Intel ou AMD). Licence : MIT ou Apache 2.0, voir NOTICE et licences/.

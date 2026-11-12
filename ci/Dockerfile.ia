@@ -1,0 +1,4 @@
+# AI mode prototype: training and measurements (PyTorch, NVIDIA GPU or
+# CPU). CUDA 12.4: still supports Pascal cards (GTX 10xx).
+FROM python:3.12-slim
+RUN pip install --no-cache-dir torch==2.5.1 numpy --index-url https://download.pytorch.org/whl/cu124 --extra-index-url https://pypi.org/simple

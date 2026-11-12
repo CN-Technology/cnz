@@ -1,0 +1,11 @@
+# Cross-compilation for macOS (Apple Silicon and Intel) with Zig, which
+# ships the Mac system headers. Only checks that the code compiles; the
+# tests themselves must run on a real Mac (see .github/workflows).
+FROM rust:1-slim-trixie
+ARG ZIG=0.13.0
+RUN apt-get update && apt-get install -y --no-install-recommends curl xz-utils ca-certificates \
+    && rm -rf /var/lib/apt/lists/* \
+    && curl -fsSL https://ziglang.org/download/${ZIG}/zig-linux-x86_64-${ZIG}.tar.xz | tar -xJ -C /opt \
+    && ln -s /opt/zig-linux-x86_64-${ZIG}/zig /usr/local/bin/zig \
+    && cargo install --locked cargo-zigbuild \
+    && rustup target add aarch64-apple-darwin x86_64-apple-darwin

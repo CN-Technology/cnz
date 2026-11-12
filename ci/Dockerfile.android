@@ -1,0 +1,14 @@
+# Build for Android (64-bit ARM, Android 7.0 / API 24 and later) with
+# Google's official NDK.
+FROM rust:1-slim-trixie
+ARG NDK=android-ndk-r27c
+RUN apt-get update && apt-get install -y --no-install-recommends curl unzip ca-certificates \
+    && rm -rf /var/lib/apt/lists/* \
+    && curl -fsSL -o /tmp/ndk.zip https://dl.google.com/android/repository/${NDK}-linux.zip \
+    && unzip -q /tmp/ndk.zip -d /opt && rm /tmp/ndk.zip && mv /opt/${NDK} /opt/ndk \
+    && rustup target add aarch64-linux-android
+ENV TOOLS=/opt/ndk/toolchains/llvm/prebuilt/linux-x86_64/bin
+ENV CARGO_TARGET_AARCH64_LINUX_ANDROID_LINKER=${TOOLS}/aarch64-linux-android24-clang \
+    CC_aarch64_linux_android=${TOOLS}/aarch64-linux-android24-clang \
+    CXX_aarch64_linux_android=${TOOLS}/aarch64-linux-android24-clang++ \
+    AR_aarch64_linux_android=${TOOLS}/llvm-ar

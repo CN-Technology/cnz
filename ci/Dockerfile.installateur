@@ -1,0 +1,7 @@
+# Tries the Windows installer (a 32-bit program, like every NSIS
+# installer) under 32- and 64-bit Wine.
+FROM debian:13-slim
+RUN dpkg --add-architecture i386 && apt-get update \
+    && apt-get install -y --no-install-recommends wine wine32:i386 wine64 \
+    && rm -rf /var/lib/apt/lists/*
+ENV WINEDEBUG=-all LANG=C.UTF-8

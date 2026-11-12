@@ -1,0 +1,35 @@
+# Robustness tests with libFuzzer (cargo fuzz, Rust nightly): see ci/Dockerfile.fuzz.
+[package]
+name = "cnz-fuzz"
+version = "0.0.0"
+publish = false
+edition = "2021"
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+libfuzzer-sys = "0.4"
+cnz = { path = ".." }
+zeroize = "1"
+
+[[bin]]
+name = "archive"
+path = "fuzz_targets/archive.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "extraction"
+path = "fuzz_targets/extraction.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "decodage"
+path = "fuzz_targets/decodage.rs"
+test = false
+doc = false
+bench = false

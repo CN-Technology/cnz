@@ -1,0 +1,13 @@
+# Cross-compilation for Windows (MinGW) and tests under Wine.
+FROM rust:1-slim-trixie
+RUN dpkg --add-architecture i386 && apt-get update \
+    && apt-get install -y --no-install-recommends gcc-mingw-w64-x86-64 g++-mingw-w64-x86-64 wine wine64 \
+    && rm -rf /var/lib/apt/lists/* \
+    && rustup target add x86_64-pc-windows-gnu \
+    && cd /usr/x86_64-w64-mingw32/include \
+    && ln -s powrprof.h PowrProf.h && ln -s wbemidl.h Wbemidl.h
+ENV CARGO_TARGET_X86_64_PC_WINDOWS_GNU_LINKER=x86_64-w64-mingw32-gcc \
+    CXX_x86_64_pc_windows_gnu=x86_64-w64-mingw32-g++ \
+    CARGO_TARGET_X86_64_PC_WINDOWS_GNU_RUNNER=wine \
+    WINEDEBUG=-all \
+    LANG=C.UTF-8
